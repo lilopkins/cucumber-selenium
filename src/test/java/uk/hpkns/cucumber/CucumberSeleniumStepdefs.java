@@ -16,27 +16,37 @@ public class CucumberSeleniumStepdefs {
 
     FirefoxDriver driver;
 
-    @Given("^I browse to the webpage \"(.*)\"$")
-    public void browseTo(String url) {
+    public CucumberSeleniumStepdefs() {
         FirefoxOptions options = new FirefoxOptions();
         driver = new FirefoxDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+    }
+
+    @Given("I browse to the webpage {string}")
+    public void browseTo(String url) {
         driver.get(url);
     }
 
-    @When("^I enter the search query \"(.*)\" and press search$")
+    @When("I enter the search query {string}")
     public void search(String query) {
         WebElement searchBox = driver.findElement(By.name("q"));
-        WebElement searchButton = driver.findElement(By.className("search__button"));
-
         searchBox.sendKeys(query);
+    }
+
+    @When("I press search")
+    public void pressSearch() {
+        WebElement searchButton = driver.findElement(By.className("search__button"));
         searchButton.click();
     }
 
-    @Then("^The results list appears$")
+    @Then("the results list appears")
     public void resultsAppear() {
         WebElement results = driver.findElement(By.className("results"));
         assertTrue(results.isDisplayed(), "results displayed");
+    }
+
+    @Then("the browser is closed")
+    public void close() {
         driver.quit();
     }
 }
